@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<header class="nav-bar">
+    <a href="{% url 'home' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+    <nav>
+        <ul class="nav-links">
+            <li><a class="hover-underline" href="#">About</a></li>
+            <li><a class="hover-underline" href="{% url 'login' %}">Login</a></li>
+            <li><button class="transparent-btn" onclick="location.href=`{% url 'register' %}`">Get Started</button></li>
+        </ul>
+    </nav>
+</header>
+<div class="hero-img">
+    <img id="hero-img" src="{% static 'main/images/creative-women.svg' %}" alt="phone">
+</div>
+<section id="hero">
+    <h1 class="hero-head">Share What You <span style="font-family: Outfit, sans-serif; color: #d3344c;">Love</span></h1>
+    <p class="subhead">Discover <span style="color: #bdce25;">stories</span>, <span style="color: #35a6c9;">insights</span> and <span style="color: #c97035;">passions</span> from creators like you.</p>
+    <button class="black-btn" onclick="location.href=`{% url 'register' %}`" style="margin-left: 2vw;">Start Writing</button>
+</section>
+
+<footer class="footer">
+    <p>Copyright &#169; 2024 <span>Aayan Tanvir</span></p>
+</footer>
+
+{% endblock content %}
