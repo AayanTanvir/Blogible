@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'home' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a class="hover-underline" href="{% url 'write_blog' %}">Write</a></li>
+                <li><a class="hover-underline" href="{% url 'profile_page' pk=current_user.id username=current_user.username %}">Profile</a></li>
+                <li><a class="hover-underline" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% if current_user == blog.user %}
+        <a href="{% url 'update_blog' pk=blog.id title=blog.title|slugify %}" class="blog-edit-btn"><img src="{% static 'main/images/edit.svg' %}" alt="edit"></a>
+        <button id="blog-delete-btn"><img src="{% static 'main/images/delete.svg' %}" alt="delete"></button>
+        <div class="confirmation-popup">
+            <h1>Are you sure?</h1>
+            <p>This blog will be deleted forever!</p>
+            <button class="transparent-btn" id="cancel-confirmation-btn">Cancel</button>
+            <button class="red-btn" id="delete-confirmation-btn" data-url="{% url 'blog_actions' action='delete' pk=blog.id %}">Delete</button>
+        </div>
+        <div id="overlay"></div>
+    {% endif %}
+
+    <div class="blog-wrapper">
+        <div class="blog-body-wrapper">
+            <div class="blog-info">
+                <h1>{{blog.title}}</h1>
+                <h5>{{blog.description}}</h5>
+                <h4>By <a class="hover-size" href="{% url 'profile_page' pk=blog.user.id username=blog.user.username %}">{{blog.user.username|title}}</a></h4>
+            </div>
+            <hr class="h-line" style="margin-top: 50px;">
+            <div class="blog-content">
+                {{blog.body|safe}}  
+                <h4 style="margin-top: 30px;">Written By <a class="hover-size" href="{% url 'profile_page' pk=blog.user.id username=blog.user.username %}">{{blog.user.username|title}}</a></h4>
+            </div>
+            <div class="blog-links-wrapper">
+                {% if like_status == 'not_liked' %}
+                    <button class="blog-links" id="likes" data-url-like="{% url 'blog_actions' action='like' pk=blog.id %}" data-like-status="not_liked">
+                        <img id="like" src="{% static 'main/images/like.svg' %}" alt="Likes">
+                        <p>{{likes_count}}</p>
+                    </button>
+                {% elif like_status == 'liked' %}
+                    <button class="blog-links clicked-like" id="likes" data-url-like="{% url 'blog_actions' action='like' pk=blog.id %}" data-like-status="liked">
+                        <img id="like" src="{% static 'main/images/like.svg' %}" alt="Likes">
+                        <p>{{likes_count}}</p>
+                    </button>
+                {% endif %}
+    
+                {% if dislike_status == 'not_disliked' %}
+                    <button class="blog-links" id="dislikes" data-url-dislike="{% url 'blog_actions' action='dislike' pk=blog.id %}" data-dislike-status="not_disliked">
+                        <img id="like" src="{% static 'main/images/dislike.svg' %}" alt="Dislikes">
+                        <p>{{dislikes_count}}</p>
+                    </button>
+                {% elif dislike_status == 'disliked' %}
+                    <button class="blog-links clicked-dislike" id="dislikes" data-url-dislike="{% url 'blog_actions' action='dislike' pk=blog.id %}" data-disliked-status="disliked">
+                        <img id="like" src="{% static 'main/images/dislike.svg' %}" alt="Dislikes">
+                        <p>{{dislikes_count}}</p>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="blog-comments">
+            <form class="comment-form" method="post">
+                {% csrf_token %}
+                <input type="text" name="form-comment" class="input-field" id="form-comment-text" placeholder="Add a comment">
+            </form>
+            {% if comments != 'nothing' %}
+                <hr class="h-line">
+                <div class="comments-wrapper">
+                    {% for comment in comments %}
+                    <div class="comment-card">
+                        <img class="comment-pfp" src="{{comment.commenter.pfp.url}}" alt="pfp">
+                        <div class="text-wrapper">
+                            <a href="{% url 'profile_page' pk=comment.commenter.user.id username=comment.commenter.user.username %}"><p class="comment-author">{{comment.commenter.username|title}}</p></a>
+                            <p class="comment-text">{{comment.text}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+            <h2 id="blog-comment-head">No Comments</h2>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}

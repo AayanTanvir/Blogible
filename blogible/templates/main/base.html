@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{csrf_token}}">
     <title>Blogible</title>
     <link rel="stylesheet" href="{% static 'main/stylesheet.css' %}" />
     <link rel="icon" type="icon/x-icon" href="{% static 'main/favicon.png' %}">
+    <script src="{% static 'main/script.js' %}" defer></script>
+
 </head>
 <body>
     {% block content %}
-        <div class="container">
-
-        </div>
+        
     {% endblock content %}
+    <footer class="footer">
+        <p>Copyright &#169; <script>document.write(new Date().getFullYear())</script> Aayan Tanvir</p>
+    </footer>
 </body>
 </html>

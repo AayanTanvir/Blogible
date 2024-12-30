@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'home' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a class="hover-underline" href="#">Write</a></li>
+                <li><a class="hover-underline" href="{% url 'profile_page' pk=current_user.id username=current_user.username %}">Profile</a></li>
+                <li><a class="hover-underline" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <form class="profile-edit-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Edit Profile</h2>
+
+        <div class="edit-username-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/username.svg' %}" alt="">
+            {{form.username}}
+        </div>
+        <div class="profile-edit-pfp" id="upload-btn">
+            <img src="{% static 'main/images/upload.svg' %}" alt="" class="upload-i">
+            {{form.pfp.label_tag}}
+            {{form.pfp}}
+        </div>
+        {{form.bio}}
+        <button type="submit" class="black-btn profile-edit-btn">Apply</button>
+    </form>
+
+
+{% endblock content %}

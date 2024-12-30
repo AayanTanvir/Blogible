@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'landing_page' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+    </header>
+
+    <form class="register-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Register Your Account</h2>
+        <div class="username-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/username.svg' %}" alt="">
+            {{form.username}}
+        </div>
+        <div class="email-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/email.svg' %}" alt="">
+            {{form.email}}
+        </div>
+        <div class="pass1-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/pass.svg' %}" alt="">
+            {{form.password1}}
+        </div>
+        <div class="pass2-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/confirm-pass.svg' %}" alt="">
+            {{form.password2}}
+        </div>
+
+        <div class="upload-btn" id="upload-btn">
+            <img src="{% static 'main/images/upload.svg' %}" alt="" class="upload-i">
+            {{form.pfp.label_tag}}
+            {{form.pfp}}
+        </div>
+        <button type="submit" class="black-btn register-btn">Submit</button>
+        <div class="errors">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="error">
+                        <p>{{error}}</p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <p class="auth-footer">Already have an account? <a href="{% url 'login' %}" style="color: var(--secondary-color); font-size: 0.85rem;">Login!</a></p>
+    </form>
+{% endblock content %}

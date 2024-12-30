@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'landing_page' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+    </header>
+
+    <form class="login-form" method="post">
+        {% csrf_token %}
+        <h2>Login to your account</h2>
+        
+        <div class="login-username-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/username.svg' %}" alt="">
+            {{form.username}}
+        </div>
+        <div class="login-pass-wrapper">
+            <img class="reg-icon" src="{% static 'main/images/pass.svg' %}" alt="">
+            {{form.password}}
+        </div>
+        <button class="black-btn login-btn" type="submit">Login</button>
+        <div class="errors">
+            <div class="error">
+                <p>{{error}}</p>
+            </div>
+        </div>
+        <p class="auth-footer">Don't have an account? <a href="{% url 'register' %}" style="color: var(--secondary-color); font-size: 0.85rem;">Register!</a></p>
+    </form>
+{% endblock content %}

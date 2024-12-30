@@ -1,0 +1,77 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'home' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a class="hover-underline" href="{% url 'write_blog' %}">Write</a></li>
+                <li><a class="hover-underline" href="{% url 'profile_page' pk=current_user.id username=current_user.username %}">Profile</a></li>
+                <li><a class="hover-underline" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="blogs-section">
+        <div class="blogs-wrapper">
+            {% for blog in blogs %}
+                <div class="blog-card">
+                    <a href="{% url 'blog_page' pk=blog.id title=blog.title|slugify %}">
+                        <div class="card-header">
+                            <h1>{{blog.title}}</h1>
+                        </div>
+                        <p class="card-author">By {{blog.user.username|title}}</p>
+                        <p class="card-description">{{blog.description}}</p>
+                    </a>
+                </div>
+            {% empty %}
+                <h1>No Blogs Found D:</h1>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <div id="filters-section">
+        <form id="filter-form" method="get">
+            <div class="search-bar-wrapper">
+                <input class="input-field search-bar" type="text" name="search-text" placeholder="Search Blogs">
+                <img id="search-bar-icon" src="{% static 'main/images/search.svg' %}">
+            </div>
+            
+            <select name="category" class="choice-field" id="filter-category">
+                <option value="" disabled selected>Category</option>
+                <option value="all">All</option>
+                <option value="general">General</option>
+                <option value="sports">Sports</option>
+                <option value="food">Food</option>
+                <option value="technology">Technology</option>
+                <option value="gaming">Gaming</option>
+                <option value="politics">Politics</option>
+                <option value="fitness">Fitness</option>
+                <option value="medical">Medical</option>
+                <option value="nature">Nature</option>
+                <option value="other">Other</option>
+            </select>
+            <select name="filter-by" class="choice-field" id="filter-by">
+                <option value="" disabled selected>Filter By</option>
+                <option value="most-liked">Most Liked</option>
+                <option value="most-disliked">Most Disliked</option>
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+                <option value="followed-creators-only">Followed Creators Only</option>
+                <option value="none">None</option>
+            </select>
+        </form>
+        <div class="filters">
+            {% if search_query != '' %}
+                <p>Search Query: <i>{{search_query}}</p>
+            {% elif current_category != '' %}
+                <p>Category: <i>{{current_category}}</i></p>
+            {% elif current_filter != '' %}
+                <p>Filter: <i>{{current_filter}}</i></p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

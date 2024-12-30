@@ -1,0 +1,56 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'home' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a class="hover-underline" href="{% url 'write_blog' %}">Write</a></li>
+                {% if not can_follow %}
+                    <!--Activate navbar link if viewing your own profile otherwise deactivate it.-->
+                    <li><a class="hover-underline active-link" href="{% url 'profile_page' pk=current_user.id username=current_user.username %}">Profile</a></li>
+                {% else %}
+                    <li><a class="hover-underline" href="{% url 'profile_page' pk=current_user.id username=current_user.username %}">Profile</a></li>
+                {% endif %}
+                <li><a class="hover-underline" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="profile-container">
+        {% if not can_follow %}
+            <a href="{% url 'edit-profile' pk=current_user.id username=current_user.username %}" class="edit-btn"><img src="{% static 'main/images/edit.svg' %}" alt="edit"></a>
+        {% endif %}
+        <img id="profile-img" src="{{profile.pfp.url}}" alt="pfp">
+        <h1 id="profile-name">{{profile.username|title}}</h1>
+        <p id="profile-followers">{{followers|format_number}} followers</p>
+        {% if can_follow %}
+            {% if has_followed %}
+                <button class="black-btn follow-btn" id="follow-btn" data-url="{% url 'follow-creator' pk=profile.id username=profile.username %}">Unfollow</button>
+            {% else %}
+                <button class="black-btn follow-btn" id="follow-btn" data-url="{% url 'follow-creator' pk=profile.id username=profile.username %}">Follow</button>
+            {% endif %}
+        {% endif %}
+        <hr class="h-line">
+        <h2 style="margin-top: 1%;">Bio</h2>
+        <p style="margin-top: 1%; width: 60%; text-align: center;">{{profile.bio}}</p>
+        {% if blogs %}
+            <h2 style="margin-top: 5%;">Blogs</h2>
+            {% for blog in blogs %}
+                <div class="blog-card" id="profile-blog">
+                    <a href="{% url 'blog_page' pk=blog.id title=blog.title|slugify %}">
+                        <div class="card-header">
+                            <h1>{{blog.title}}</h1>
+                        </div>
+                        <p class="card-author">By {{blog.user.username|title}}</p>
+                        <p class="card-description">{{blog.description}}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+{% endblock content %}

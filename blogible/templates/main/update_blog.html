@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <header class="nav-bar">
+        <a href="{% url 'home' %}"><img class="logo" src="{% static 'main/images/logo.png' %}" alt="Blogible"></a>
+        <nav>
+            <ul class="nav-links">
+                <li><a class="hover-underline" href="{% url 'write_blog' %}">Write</a></li>
+                <li><a class="hover-underline" href="{% url 'profile_page' pk=current_user.id username=current_user.username %}">Profile</a></li>
+                <li><a class="hover-underline" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    
+    <form class="write-blog-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.media}}
+        <h1>Edit Your Blog</h1>
+        {{form.title}}
+        {{form.description}}
+        {{form.category}}
+        {{form.body}}
+        <button class="black-btn write-blog-btn" type="submit">Update</button>
+    </form>
+
+{% endblock content %}
